@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth'
 import app from '../firebase/firebase.config';
+import { useQuery } from '@tanstack/react-query';
 
 
 export const AuthContext = createContext();
@@ -43,14 +44,35 @@ const AuthProvider = ({ children }) => {
         return () => unsubscribe();
     }, [])
 
+    // added products cart data getting started
+
+    const [cartProducts, setCartProducts] = useState([]);
+    const { data: viewCart = [], isLoading, refetch } = useQuery({
+        queryKey: ['viewCart'],
+        queryFn: async () => {
+            const res = await fetch('http://localhost:5000/viewCart');
+            const data = await res.json();
+            setCartProducts(data);
+            return data;
+        }
+    })
+
+    // added products cart data getting end
+
     const authInfo = {
+        // authentication data
         createUser,
         signIn,
         updateUser,
         logout,
         user,
         googleSignIn,
-        loading
+        loading,
+        // shopping cart added products data
+        cartProducts,
+        viewCart,
+        isLoading,
+        refetch
     }
     return (
         <AuthContext.Provider value={authInfo}>

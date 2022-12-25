@@ -8,7 +8,7 @@ import close from '../../assets/icon/close.svg';
 import { AuthContext } from '../../context/AuthProvider';
 
 const Navbar = () => {
-    const { user, logout } = useContext(AuthContext);
+    const { user, logout, cartProducts, refetch } = useContext(AuthContext);
     const [toggle, setToggle] = useState(false);
 
     const handleLogout = () => {
@@ -46,7 +46,27 @@ const Navbar = () => {
 
                         </ul>
                     </div>
-                    <Link to='/cart'><img src={cart} alt="cart" /></Link>
+                    {/* cart functionalities */}
+                    <div className="dropdown dropdown-end dropdown-hover">
+                        <label tabIndex={0} className=""><img src={cart} alt="cart" className='cursor-pointer' /></label>
+                        <div tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                            {
+                                user?.email ?
+                                    <div>
+                                        {
+                                            cartProducts.map((products, i) => <p>products</p>)
+                                        }
+                                    </div>
+                                    :
+                                    <>
+                                        <li><Link to='/login'>Login</Link></li>
+                                        <li><Link to='/signup'>Sign Up</Link></li>
+                                    </>
+                            }
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

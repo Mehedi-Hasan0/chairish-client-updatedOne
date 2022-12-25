@@ -1,20 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../../context/AuthProvider';
 import Loading from '../../Loading/Loading';
 import CartProductsCard from './CartProductsCard/CartProductsCard';
 
 const Cart = () => {
-    const [cartProducts, setCartProducts] = useState([]);
-    const { data: viewCart = [], isLoading } = useQuery({
-        queryKey: ['viewCart'],
-        queryFn: async () => {
-            const res = await fetch('http://localhost:5000/viewCart');
-            const data = await res.json();
-            setCartProducts(data);
-            return data;
-        }
-    })
+    const { viewCart, isLoading, } = useContext(AuthContext);
 
     if (isLoading) {
         return <Loading />

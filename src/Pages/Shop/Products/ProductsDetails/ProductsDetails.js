@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Loading from '../../../Loading/Loading';
@@ -12,14 +12,16 @@ import support from '../../../../assets/chooseUs/support.svg';
 import truck from '../../../../assets/chooseUs/truck.svg';
 import bags from '../../../../assets/chooseUs/bags.svg';
 import buyIcon from '../../../../assets/icon/icons8-buying-24.png';
+import { AuthContext } from '../../../../context/AuthProvider';
 
 const ProductsDetails = () => {
+    const { refetch } = useContext(AuthContext);
     const detail = useLoaderData();
     const [toggle, setToggle] = useState(false);
 
     const { name, price, description, img, how_it_fits, ratings, product_details } = detail;
 
-    const { data: limitedData = [], isLoading, refetch } = useQuery({
+    const { data: limitedData = [], isLoading } = useQuery({
         queryKey: ['limitedData'],
         queryFn: async () => {
             const res = await fetch('http://localhost:5000/shop2');
@@ -46,6 +48,7 @@ const ProductsDetails = () => {
                 console.log(data);
                 if (data.acknowledged > 0) {
                     toast.success('Products added to carts');
+                    refetch();
                 }
             })
 

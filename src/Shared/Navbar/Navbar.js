@@ -6,9 +6,10 @@ import cart from '../../assets/cart.svg';
 import menu from '../../assets/icon/menu.svg';
 import close from '../../assets/icon/close.svg';
 import { AuthContext } from '../../context/AuthProvider';
+import NavCart from './NavCart/NavCart';
 
 const Navbar = () => {
-    const { user, logout, cartProducts, refetch } = useContext(AuthContext);
+    const { user, logout, cartProducts } = useContext(AuthContext);
     const [toggle, setToggle] = useState(false);
 
     const handleLogout = () => {
@@ -49,13 +50,21 @@ const Navbar = () => {
                     {/* cart functionalities */}
                     <div className="dropdown dropdown-end dropdown-hover">
                         <label tabIndex={0} className=""><img src={cart} alt="cart" className='cursor-pointer' /></label>
-                        <div tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                        <div tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-[450px]">
                             {
                                 user?.email ?
-                                    <div>
+                                    <div className='flex flex-col'>
                                         {
-                                            cartProducts.map((products, i) => <p>products</p>)
+                                            cartProducts.map((products, i) => <NavCart key={i} products={products} />)
                                         }
+                                        <div className='my-7 mx-auto'>
+                                            <div className='flex'>
+                                                <Link to='/cart'>
+                                                    <button className='btn bg-[#ffff] hover:bg-white border rounded-full md:w-40 w-30 shadow-xl text-black normal-case mr-5'> View cart</button>
+                                                </Link>
+                                                <Link to='/cart'><button className='btn btn-dark rounded-full md:w-40 w-30 shadow-xl text-white normal-case'> Checkout</button></Link>
+                                            </div>
+                                        </div>
                                     </div>
                                     :
                                     <>
